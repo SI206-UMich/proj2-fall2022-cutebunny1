@@ -86,36 +86,37 @@ def get_listing_information(listing_id):
     """
     # my code below:
     filename = "html_files/listing_" + listing_id + ".html"
-    f = open(filename)
-    soup = BeautifulSoup(f, 'html.parser')
-    
+    f = open(filename, 'r')
+    filename_hand = f.read()
+    soup = BeautifulSoup(filename_hand, 'html.parser')
+    f.close()
+
     # policy number
-    policy_num_list = soup.find("li", class_ = "f19phm7j dir dir-ltr")
-    policy_list = []    
-    policy_num_list = policy_num_list.text[15:]
-    policy_list = "".join(policy_num_list)
-    if re.findall('(?:P|p)ending', policy_list):
+    policy_num_list = soup.find("li", class_ = "f19phm7j").span.text
+    if "pending" in policy_num_list.lower():
         policy_num_status = "Pending"
-    else:
+    elif "exempt" in policy_num_list.lower() or "not needed" in policy_num_list.lower():
         policy_num_status = "Exempt"
+    else:
+        policy_num_status = policy_num_list 
+        
     
     # place type
-    place_list = soup.find_all('h2', class_="_14i3z6h")
-    if re.findall('Private', place_list):
+    place_list = soup.find('h2', class_="_14i3z6h").text.lower()
+    if "private" in place_list:
         place = "Private Room"
-    elif re.findall('Shared', place_list):
+    elif "shared" in place_list:
         place = "Shared Room"
     else:
         place = "Entire Room"
 
     # number of bedrooms    
     bedroom_nums = soup.find_all("li", class_ = "l7n4lsf dir dir-ltr")[1]
-    bedroom_nums_span = bedroom_nums.find_all("span")[2]
-    if re.search(r"[sS]tudio", bedroom_nums_span.text):
+    bedroom_nums_span = bedroom_nums.find_all("span")[2].text.split(' ')[0]
+    if "studio" in bedroom_nums_span.lower():
         bedroom_num = 1
     else:
-        bedroom_num = int(re.findall(r"\d+", bedroom_nums_span.text)[0])
-    # might need to do span.text on 147 and 150 (line above)
+        bedroom_num = int(bedroom_nums_span)
 
     myTup = (policy_num_status, place, bedroom_num)
     return myTup
@@ -357,3 +358,7 @@ if __name__ == '__main__':
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
     unittest.main(verbosity=2)
+
+# fix function 1
+# test extra credit
+# add the questions (2 commits)

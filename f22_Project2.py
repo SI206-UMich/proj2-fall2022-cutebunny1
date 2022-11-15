@@ -99,7 +99,6 @@ def get_listing_information(listing_id):
         policy_num_status = "Exempt"
     else:
         policy_num_status = policy_num_list 
-        
     
     # place type
     place_list = soup.find('h2', class_="_14i3z6h").text.lower()
@@ -226,23 +225,18 @@ def extra_credit(listing_id):
     never gone over their limit.
     """
     # my code below:
-    file = 'html_files/listing_' + listing_id + '_reviews.html'
+    file = "html_files/listing_" + listing_id + "_reviews.html"
     with open(file, 'r') as f:
         text = f.read()
         soup = BeautifulSoup(text, 'html.parser')
-
-    reviews_dict = {}
+    
     review_tags = soup.find_all('li', class_='_1f1oir5')
-    review = re.findall('\w{3,9} \d{4}', review_tags)
-    for review_date in review:
-        year = re.findall('\d{4}', review_date)
-        if year not in reviews_dict:
-            reviews_dict[year] = 1
-        else:
-            reviews_dict[year] += 1
-        
-    for count in reviews_dict:
-        if reviews_dict[count] > 90:
+    reviews_dict = {}
+
+    for date in review_tags:
+        year = re.findall('\d{4}', date.text)[0]
+        reviews_dict[year] = reviews_dict.get(year, 0) + 1
+        if reviews_dict[year] > 90:
             return False
     return True
 
@@ -352,6 +346,12 @@ class TestCases(unittest.TestCase):
         self.assertEqual(type(invalid_listings[0]), str)
         # check that the first element in the list is '16204265'
         self.assertEqual(invalid_listings[0], '16204265')
+    
+    def test_extra_credit(self):
+        review = extra_credit('16204265')
+        review2 = extra_credit('1944564')
+        self.assertEqual(review, False)
+        self.assertEqual(review2, True)
 
 if __name__ == '__main__':
     database = get_detailed_listing_database("html_files/mission_district_search_results.html")

@@ -359,6 +359,10 @@ if __name__ == '__main__':
     check_policy_numbers(database)
     unittest.main(verbosity=2)
 
-# fix function 1
-# test extra credit
-# add the questions (2 commits)
+# A. A different system that verifies that the business license is valid for short term rentals would be to look through every policy number and examine if it is valid. One argument I would hear from my organization is that that process is very tedious. Another argument I might hear is that there is a chance I could skip over some of the policy numbers by mistake.
+
+# B. One research question I could explore using this data is, “what is the median cost of a home in each state?”
+
+# c. One factor that is important to consider when discussing the legality of web scraping is that users often have a hard time seeing if this is legal in certain terms and conditions. The terms and conditions are “often long, dense, and subject to change” (Gilens and Williams, Federal Judge Rules It Is Not a Crime to Violate a Website’s Terms of Service.
+
+# D. One guideline is determining where the data came from and who it has to do with. Another guideline is determining how beneficial using the public data will be for others.

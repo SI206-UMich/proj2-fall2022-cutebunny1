@@ -185,12 +185,9 @@ def write_csv(data, filename):
 
 def check_policy_numbers(data):
     """
-    Write a function that takes in a list of tuples called data, (i.e. the one that is returned by
-    get_detailed_listing_database()), and parses through the policy number of each, validating the
-    policy number matches the policy number format. Ignore any pending or exempt listings.
+    Write a function that takes in a list of tuples called data, (i.e. the one that is returned by get_detailed_listing_database()), and parses through the policy number of each, validating the policy number matches the policy number format. Ignore any pending or exempt listings.
     Return the listing numbers with respective policy numbers that do not match the correct format.
-        Policy numbers are a reference to the business license San Francisco requires to operate a
-        short-term rental. These come in two forms, where # is a number from [0-9]:
+        Policy numbers are a reference to the business license San Francisco requires to operate a short-term rental. These come in two forms, where # is a number from [0-9]:
             20##-00####STR
             STR-000####
     .
@@ -205,7 +202,7 @@ def check_policy_numbers(data):
     # my code below:
     invalid_data = []
     for item in data:
-        valid = (re.findall('Pending|Exempt|STR-0{3}\d{4}|20\d{2}-0{2}\d{4}STR', item[3]))
+        valid = (re.findall('Pending|Exempt|pending|exempt|STR-0{3}\d{4}|20\d{2}-0{2}\d{4}STR', item[3]))
         if item[3] not in valid:
             invalid_data.append(item[2])
     return invalid_data
@@ -358,11 +355,3 @@ if __name__ == '__main__':
     write_csv(database, "airbnb_dataset.csv")
     check_policy_numbers(database)
     unittest.main(verbosity=2)
-
-# A. A different system that verifies that the business license is valid for short term rentals would be to look through every policy number and examine if it is valid. One argument I would hear from my organization is that that process is very tedious. Another argument I might hear is that there is a chance I could skip over some of the policy numbers by mistake.
-
-# B. One research question I could explore using this data is, “what is the median cost of a home in each state?”
-
-# c. One factor that is important to consider when discussing the legality of web scraping is that users often have a hard time seeing if this is legal in certain terms and conditions. The terms and conditions are “often long, dense, and subject to change” (Gilens and Williams, Federal Judge Rules It Is Not a Crime to Violate a Website’s Terms of Service.
-
-# D. One guideline is determining where the data came from and who it has to do with. Another guideline is determining how beneficial using the public data will be for others.
